@@ -1,4 +1,4 @@
-package com.yudi.controllers;
+package com.yudi.web.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
