@@ -17,4 +17,10 @@ public class Constans {
         public static final String LOGIN_LINK="/login";
         public static final String LOGIN_VIEW_NAME="user/login";
     }
+
+    /* payload */
+    public class Payload{
+        public static final String PAYLOAD_LINK="/payload";
+        public static final String PAYLOAD_VIEW_NAME="payload/payload";
+    }
 }
