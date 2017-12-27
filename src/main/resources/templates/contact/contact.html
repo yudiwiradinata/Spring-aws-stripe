@@ -51,5 +51,19 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <div th:replace="common/header :: before-body-script"/>
 
+
+<script th:inline="javascript">
+    $(document).ready(function() {
+        clear();
+    });
+
+    function clear() {
+        $("#email").val("");
+        $("#firstName").val("");
+        $("#lastName").val("");
+        $("#feedback").val("");
+    }
+</script>
+
 </body>
 </html>
