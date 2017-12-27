@@ -1,0 +1,15 @@
+package com.yudi.utils;
+
+/**
+ * Created by Yudi on 27/12/2017.
+ */
+public class Constans {
+
+    /* contact */
+    public class Contact{
+        public static final String CONTACT_US_LINK="/contact";
+        public static final String FEEDBACK_MODEL_KEY="feedback";
+        public static final String CONTACT_US_VIEW_NAME="contact/contact";
+    }
+
+}
