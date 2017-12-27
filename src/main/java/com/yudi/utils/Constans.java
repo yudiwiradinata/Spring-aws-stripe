@@ -12,4 +12,9 @@ public class Constans {
         public static final String CONTACT_US_VIEW_NAME="contact/contact";
     }
 
+    /* login */
+    public class Login{
+        public static final String LOGIN_LINK="/login";
+        public static final String LOGIN_VIEW_NAME="user/login";
+    }
 }
