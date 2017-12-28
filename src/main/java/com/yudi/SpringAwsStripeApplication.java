@@ -1,14 +1,43 @@
 package com.yudi;
 
+import com.yudi.backend.persistence.domain.backend.Role;
+import com.yudi.backend.persistence.domain.backend.User;
+import com.yudi.backend.persistence.domain.backend.UserRole;
+import com.yudi.backend.service.UserService;
+import com.yudi.enums.PlansEnum;
+import com.yudi.enums.RolesEnum;
+import com.yudi.utils.UserUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "com.yudi.backend.persistence.repositories")
-public class SpringAwsStripeApplication {
+public class SpringAwsStripeApplication implements CommandLineRunner{
+
+	/*the application logger*/
+	private static final Logger LOG = LoggerFactory.getLogger(SpringAwsStripeApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringAwsStripeApplication.class, args);
+	}
+
+	@Autowired
+	private UserService userService;
+
+	@Override
+	public void run(String... strings) throws Exception {
+		Set<UserRole> userRoles = new HashSet<>();
+		User basicUser = UserUtils.createBasicUser();
+		userRoles.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
+		LOG.debug("Create user with username {}", basicUser.getUsername());
+		userService.createUser(basicUser, PlansEnum.BASIC, userRoles);
+		LOG.debug("User created {}", basicUser.getUsername());
+
 	}
 }

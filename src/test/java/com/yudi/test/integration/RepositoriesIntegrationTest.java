@@ -7,6 +7,9 @@ import com.yudi.backend.persistence.domain.backend.UserRole;
 import com.yudi.backend.persistence.repositories.PlanRepository;
 import com.yudi.backend.persistence.repositories.RoleRepository;
 import com.yudi.backend.persistence.repositories.UserRepository;
+import com.yudi.enums.PlansEnum;
+import com.yudi.enums.RolesEnum;
+import com.yudi.utils.UserUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,8 +37,6 @@ public class RepositoriesIntegrationTest {
     @Autowired
     private RoleRepository roleRepository;
 
-    private static final int BASIC_PLAN_ID = 1;
-    private static final int BASIC_ROLE_ID = 1;
 
     @Test
     public void init() {
@@ -46,15 +47,15 @@ public class RepositoriesIntegrationTest {
 
     @Test
     public void testCreateNewRole() {
-        Role basicRole = createBasicRole();
+        Role basicRole = createBasicRole(RolesEnum.BASIC);
         roleRepository.save(basicRole);
-        Role getRole = roleRepository.findOne(basicRole.getId());
+        Role getRole = roleRepository.findOne(RolesEnum.BASIC.getId());
         Assert.assertNotNull(getRole);
     }
 
     @Test
     public void testCreateNewPlan() {
-        Plan basicPlan = createBasicPlan();
+        Plan basicPlan = createBasicPlan(PlansEnum.BASIC);
         planRepository.save(basicPlan);
         Plan getPlan = planRepository.findOne(basicPlan.getId());
         Assert.assertNotNull(getPlan);
@@ -62,17 +63,18 @@ public class RepositoriesIntegrationTest {
 
     @Test
     public void testCreateNewUser() {
-        Plan basicPlan = createBasicPlan();
+        Plan basicPlan = createBasicPlan(PlansEnum.BASIC);
         planRepository.save(basicPlan);
 
-        User basicUser = createBasicUser();
+        User basicUser = UserUtils.createBasicUser();
         basicUser.setPlan(basicPlan);
 
-        Role basicRole = createBasicRole();
+        Role basicRole = createBasicRole(RolesEnum.BASIC);
         Set<UserRole> userRoles = new HashSet<>();
-        UserRole userRole = new UserRole();
-        userRole.setUser(basicUser);
+        UserRole userRole = new UserRole(basicUser,basicRole);
+        /*userRole.setUser(basicUser);
         userRole.setRole(basicRole);
+        */
         userRoles.add(userRole);
 
         basicUser.getUserRoles().addAll(userRoles);
@@ -97,33 +99,20 @@ public class RepositoriesIntegrationTest {
 
     }
 
-    private Role createBasicRole() {
-        Role role = new Role();
+    private Role createBasicRole(RolesEnum rolesEnum) {
+        /*Role role = new Role();
         role.setId(BASIC_ROLE_ID);
         role.setName("ROLE_USER");
-        return role;
+        return role;*/
+        return new Role(rolesEnum);
     }
 
-    private Plan createBasicPlan() {
-        Plan plan = new Plan();
+    private Plan createBasicPlan(PlansEnum plansEnum) {
+        /*Plan plan = new Plan();
         plan.setId(BASIC_PLAN_ID);
         plan.setName("Basic");
-        return plan;
+        return plan;*/
+        return new Plan(plansEnum);
     }
 
-    private User createBasicUser(){
-        User user = new User();
-        user.setUsername("basicUser");
-        user.setPassword("password");
-        user.setEmail("ä@gfk.com");
-        user.setFirstName("yudi");
-        user.setLastName("dinata");
-        user.setPhoneNumber("021283929");
-        user.setCountry("INA");
-        user.setEnabled(true);
-        user.setDescription("TES DESC");
-        user.setProfileImageUrl("gssfsfdssefe");
-
-        return user;
-    }
 }
