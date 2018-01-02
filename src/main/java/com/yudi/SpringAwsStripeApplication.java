@@ -10,6 +10,7 @@ import com.yudi.utils.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,13 +31,24 @@ public class SpringAwsStripeApplication implements CommandLineRunner{
 	@Autowired
 	private UserService userService;
 
+    @Value("${webmaster.username}")
+    private String webmasterUsername;
+
+    @Value("${webmaster.password}")
+    private String webmasterPassword;
+
+    @Value("${webmaster.email")
+    private String webmasterEmail;
+
+
 	@Override
 	public void run(String... strings) throws Exception {
-		Set<UserRole> userRoles = new HashSet<>();
-		User basicUser = UserUtils.createBasicUser();
-		userRoles.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
+		User basicUser = UserUtils.createBasicUser(webmasterUsername,webmasterEmail);
+        basicUser.setPassword(webmasterPassword);
+        Set<UserRole> userRoles = new HashSet<>();
+		userRoles.add(new UserRole(basicUser, new Role(RolesEnum.ADMIN)));
 		LOG.debug("Create user with username {}", basicUser.getUsername());
-		userService.createUser(basicUser, PlansEnum.BASIC, userRoles);
+		userService.createUser(basicUser, PlansEnum.PRO, userRoles);
 		LOG.debug("User created {}", basicUser.getUsername());
 
 	}

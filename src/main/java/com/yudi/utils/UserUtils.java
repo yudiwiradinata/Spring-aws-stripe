@@ -26,4 +26,19 @@ public class UserUtils {
         return user;
     }
 
+    public static User createBasicUser(String username, String email){
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword("password123");
+        user.setEmail(email);
+        user.setFirstName("yudi");
+        user.setLastName("dinata");
+        user.setPhoneNumber("021283929");
+        user.setCountry("INA");
+        user.setEnabled(true);
+        user.setDescription("TES DESC");
+        user.setProfileImageUrl("gssfsfdssefe");
+        return user;
+    }
+
 }
