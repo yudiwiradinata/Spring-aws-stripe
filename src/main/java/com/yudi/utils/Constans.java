@@ -16,6 +16,7 @@ public class Constans {
     public class Login{
         public static final String LOGIN_LINK="/login";
         public static final String LOGIN_VIEW_NAME="user/login";
+        public static final int DEFAULT_TOKEN_LENGTH_IN_MINUTES = 120;
     }
 
     /* payload */

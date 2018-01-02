@@ -4,20 +4,14 @@ import com.yudi.backend.persistence.domain.backend.Plan;
 import com.yudi.backend.persistence.domain.backend.Role;
 import com.yudi.backend.persistence.domain.backend.User;
 import com.yudi.backend.persistence.domain.backend.UserRole;
-import com.yudi.backend.persistence.repositories.PlanRepository;
-import com.yudi.backend.persistence.repositories.RoleRepository;
-import com.yudi.backend.persistence.repositories.UserRepository;
 import com.yudi.enums.PlansEnum;
 import com.yudi.enums.RolesEnum;
-import com.yudi.utils.UserUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -26,17 +20,7 @@ import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class RepositoriesIntegrationTest {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PlanRepository planRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
+public class UserIntegrationTest extends AbstractIntegrationTest{
 
     @Test
     public void init() {
@@ -108,38 +92,4 @@ public class RepositoriesIntegrationTest {
         userRepository.delete(basicuser.getId());
     }
 
-    private Role createBasicRole(RolesEnum rolesEnum) {
-        /*Role role = new Role();
-        role.setId(BASIC_ROLE_ID);
-        role.setName("ROLE_USER");
-        return role;*/
-        return new Role(rolesEnum);
-    }
-
-    private Plan createBasicPlan(PlansEnum plansEnum) {
-        /*Plan plan = new Plan();
-        plan.setId(BASIC_PLAN_ID);
-        plan.setName("Basic");
-        return plan;*/
-        return new Plan(plansEnum);
-    }
-
-    private User createUser(){
-        Plan basicPlan = createBasicPlan(PlansEnum.BASIC);
-        planRepository.save(basicPlan);
-
-        User basicUser = UserUtils.createBasicUser();
-        basicUser.setPlan(basicPlan);
-
-        Role basicRole = createBasicRole(RolesEnum.BASIC);
-        roleRepository.save(basicRole);
-
-        Set<UserRole> userRoles = new HashSet<>();
-        UserRole userRole = new UserRole(basicUser,basicRole);
-        userRoles.add(userRole);
-
-        basicUser.getUserRoles().addAll(userRoles);
-        basicUser = userRepository.save(basicUser);
-        return basicUser;
-    }
 }
