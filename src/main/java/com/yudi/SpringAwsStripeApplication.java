@@ -37,7 +37,7 @@ public class SpringAwsStripeApplication implements CommandLineRunner{
     @Value("${webmaster.password}")
     private String webmasterPassword;
 
-    @Value("${webmaster.email")
+    @Value("${webmaster.email}")
     private String webmasterEmail;
 
 

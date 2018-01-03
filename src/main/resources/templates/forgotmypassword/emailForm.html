@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+
+<body>
+
+<div th:replace="common/navbar :: common-navbar"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-center">
+            <div th:if="${mailSent != null}" class="alert alert-success alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                <p th:text="#{forgotmypassword.message.sent.success}"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- login form -->
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h1 class="text-center" th:text="#{forgotmypassword.fill.in.below}"></h1>
+            <br/>
+            <div class="well">
+                <form id="forgotPasswordForm" th:action="@{/forgotmypassword}" method="post" role="form">
+                    <div class="form-group">
+                        <label th:text="#{form.email}"></label>
+                        <input type="email" class="form-control" id="email" name="email"/>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" th:text="#{forgotmypassword.submit.text}" class="btn btn-primary"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div><!-- /.container -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<div th:replace="common/header :: before-body-script"/>
+
+</body>
+</html>

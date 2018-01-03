@@ -24,4 +24,14 @@ public class Constans {
         public static final String PAYLOAD_LINK="/payload";
         public static final String PAYLOAD_VIEW_NAME="payload/payload";
     }
+
+    /* forgot my password */
+    public class ForgotPassword{
+        public static final String EMAIL_ADDRESS_VIEW_NAME="forgotmypassword/emailForm";
+        public static final String FORGOT_PASSWORD_LINK="/forgotmypassword";
+        public static final String MAIL_SENT_KEY="mailSent";
+        public static final String CHANGE_PASSWORD_PATH = "/changeuserpassword";
+        public static final String EMAIL_MESSAGE_TEXT_PROPERTY_NAME = "forgotmypassword.email.text";
+
+    }
 }

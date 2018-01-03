@@ -1,6 +1,7 @@
 package com.yudi.config;
 
 import com.yudi.backend.service.UserSecurityService;
+import com.yudi.utils.Constans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/about/**",
             "/contact/**",
             "/error/**/*",
-            "/console/**"
+            "/console/**",
+            Constans.ForgotPassword.FORGOT_PASSWORD_LINK
     };
 
     @Override
