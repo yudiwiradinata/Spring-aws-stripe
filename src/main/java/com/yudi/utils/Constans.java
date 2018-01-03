@@ -28,10 +28,13 @@ public class Constans {
     /* forgot my password */
     public class ForgotPassword{
         public static final String EMAIL_ADDRESS_VIEW_NAME="forgotmypassword/emailForm";
+        public static final String CHANGE_PASSWORD_VIEW_NAME = "forgotmypassword/changePassword";
         public static final String FORGOT_PASSWORD_LINK="/forgotmypassword";
         public static final String MAIL_SENT_KEY="mailSent";
         public static final String CHANGE_PASSWORD_PATH = "/changeuserpassword";
         public static final String EMAIL_MESSAGE_TEXT_PROPERTY_NAME = "forgotmypassword.email.text";
 
+        public static final String PASSWORD_RESET_ATTRIBUTE_NAME = "passwordReset";
+        public static final String MESSAGE_ATTRIBUTE_NAME = "message" ;
     }
 }

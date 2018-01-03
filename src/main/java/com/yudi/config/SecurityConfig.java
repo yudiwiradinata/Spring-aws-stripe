@@ -46,7 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/contact/**",
             "/error/**/*",
             "/console/**",
-            Constans.ForgotPassword.FORGOT_PASSWORD_LINK
+            Constans.ForgotPassword.FORGOT_PASSWORD_LINK,
+            Constans.ForgotPassword.CHANGE_PASSWORD_PATH
     };
 
     @Override
