@@ -1,6 +1,7 @@
 package com.yudi.utils;
 
 import com.yudi.backend.persistence.domain.backend.User;
+import com.yudi.web.domain.frontend.BasicAccountPayload;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,5 +58,20 @@ public class UserUtils {
                 token;
 
         return  passwordRestUrl;
+    }
+
+    public static <T extends BasicAccountPayload>  User fromWebUserToDomainUser(T frontendModel) {
+        User user = new User();
+        user.setUsername(frontendModel.getUsername());
+        user.setPassword(frontendModel.getPassword());
+        user.setFirstName(frontendModel.getFirstName());
+        user.setLastName(frontendModel.getLastName());
+        user.setEmail(frontendModel.getEmail());
+        user.setPhoneNumber(frontendModel.getPhoneNumber());
+        user.setCountry(frontendModel.getCountry());
+        user.setEnabled(true);
+        user.setDescription(frontendModel.getDescription());
+
+        return user;
     }
 }
