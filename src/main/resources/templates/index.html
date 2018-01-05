@@ -9,10 +9,34 @@
 
 <div class="container">
 
-    <div class="starter-template">
-        <h1 th:text="#{index.main.h1}">entre</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br/> All you get is this text and a
-            mostly barebones HTML document.</p>
+    <div class="jumbotron">
+        <div class="text-center">
+            <h1 th:text="#{index.h1.text}"></h1>
+            <p th:text="#{index.p.lead}" class="lead"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="well">
+                <h2 th:text="#{index.basic.membership}" class="text-center"></h2>
+                <h4 th:text="#{index.h4.basic.membership}"></h4>
+                <br/>
+                <a class="btn btn-primary btn-lg btn-block"
+                   th:href="@{/signup?planId=1}"
+                   th:text="#{index.basic.signup.button}"></a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="well">
+                <h2 th:text="#{index.pro.membership}" class="text-center"></h2>
+                <h4 th:text="#{index.h4.pro.membership}"></h4>
+                <br/>
+                <a class="btn btn-success btn-lg btn-block"
+                   th:href="@{/signup?planId=2}"
+                   th:text="#{index.pro.signup.button}"></a>
+            </div>
+        </div>
     </div>
 
 </div><!-- /.container -->

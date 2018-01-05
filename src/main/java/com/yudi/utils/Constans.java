@@ -37,4 +37,12 @@ public class Constans {
         public static final String PASSWORD_RESET_ATTRIBUTE_NAME = "passwordReset";
         public static final String MESSAGE_ATTRIBUTE_NAME = "message" ;
     }
+    public static final String PAYLOAD_MODEL_KEY_NAME = "payload";
+
+    public class SignUp {
+        public static final String SUBSCRIPTION_VIEW_NAME = "registration/signup";
+        public static final String SIGNUP_URL_MAPPING = "/signup";
+        public static final String PAYLOAD_MODEL_KEY_NAME = "payload";
+
+    }
 }
