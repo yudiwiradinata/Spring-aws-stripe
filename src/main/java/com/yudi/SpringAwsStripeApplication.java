@@ -3,6 +3,7 @@ package com.yudi;
 import com.yudi.backend.persistence.domain.backend.Role;
 import com.yudi.backend.persistence.domain.backend.User;
 import com.yudi.backend.persistence.domain.backend.UserRole;
+import com.yudi.backend.service.PlanService;
 import com.yudi.backend.service.UserService;
 import com.yudi.enums.PlansEnum;
 import com.yudi.enums.RolesEnum;
@@ -31,6 +32,9 @@ public class SpringAwsStripeApplication implements CommandLineRunner{
 	@Autowired
 	private UserService userService;
 
+    @Autowired
+    private PlanService planService;
+
     @Value("${webmaster.username}")
     private String webmasterUsername;
 
@@ -43,6 +47,10 @@ public class SpringAwsStripeApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... strings) throws Exception {
+        LOG.info("Create basic and pro plans in the database ");
+        planService.createPlan(PlansEnum.BASIC.getId());
+        planService.createPlan(PlansEnum.PRO.getId());
+
 		User basicUser = UserUtils.createBasicUser(webmasterUsername,webmasterEmail);
         basicUser.setPassword(webmasterPassword);
         Set<UserRole> userRoles = new HashSet<>();

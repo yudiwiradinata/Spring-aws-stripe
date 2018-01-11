@@ -43,6 +43,9 @@ public class Constans {
         public static final String SUBSCRIPTION_VIEW_NAME = "registration/signup";
         public static final String SIGNUP_URL_MAPPING = "/signup";
         public static final String PAYLOAD_MODEL_KEY_NAME = "payload";
-
+        public static final String DUPLICATED_USERNAME_KEY = "duplicatedUsername";
+        public static final String DUPLICATED_EMAIL_KEY = "duplicatedEmail";
+        public static final String SIGNED_UP_MESSAGE_KEY = "signedUp";
+        public static final String ERROR_MESSAGE_KEY = "message";
     }
 }
