@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -49,6 +50,7 @@ public class SignupController {
 
     @RequestMapping(value = Constans.SignUp.SIGNUP_URL_MAPPING, method = RequestMethod.POST)
     public String signupPost(@RequestParam(name = "planId", required = true) int planId,
+                             @RequestParam(name = "file", required = false) MultipartFile file,
                              @ModelAttribute(Constans.SignUp.PAYLOAD_MODEL_KEY_NAME) @Valid ProAccountPayload payload
                              ,ModelMap model) throws IOException{
         if(planId != PlansEnum.BASIC.getId() && planId != PlansEnum.PRO.getId()){
@@ -84,6 +86,17 @@ public class SignupController {
 
         LOG.debug("Transforming user payload to domain object");
         User user = UserUtils.fromWebUserToDomainUser(payload);
+
+        // stores the profile images on amazon s3
+        if(file != null && !file.isEmpty()){
+            String profileImageUrl = null;
+            if(profileImageUrl != null){
+                user.setProfileImageUrl(profileImageUrl);
+            }else{
+                LOG.warn("problem on uploading to amazon s3");
+            }
+
+        }
 
         // sets plan and the roles
         LOG.debug("Retrieving plan from database");
