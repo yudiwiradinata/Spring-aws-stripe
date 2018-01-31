@@ -5,6 +5,7 @@ import com.yudi.backend.persistence.domain.backend.Role;
 import com.yudi.backend.persistence.domain.backend.User;
 import com.yudi.backend.persistence.domain.backend.UserRole;
 import com.yudi.backend.service.PlanService;
+import com.yudi.backend.service.S3Service;
 import com.yudi.backend.service.UserService;
 import com.yudi.enums.PlansEnum;
 import com.yudi.enums.RolesEnum;
@@ -48,6 +49,9 @@ public class SignupController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private S3Service s3Service;
+
     @RequestMapping(value = Constans.SignUp.SIGNUP_URL_MAPPING, method = RequestMethod.POST)
     public String signupPost(@RequestParam(name = "planId", required = true) int planId,
                              @RequestParam(name = "file", required = false) MultipartFile file,
@@ -89,7 +93,7 @@ public class SignupController {
 
         // stores the profile images on amazon s3
         if(file != null && !file.isEmpty()){
-            String profileImageUrl = null;
+            String profileImageUrl = s3Service.storeProfileName(file, payload.getUsername());
             if(profileImageUrl != null){
                 user.setProfileImageUrl(profileImageUrl);
             }else{
