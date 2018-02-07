@@ -6,6 +6,7 @@ import com.yudi.backend.persistence.domain.backend.User;
 import com.yudi.backend.persistence.domain.backend.UserRole;
 import com.yudi.backend.service.PlanService;
 import com.yudi.backend.service.S3Service;
+import com.yudi.backend.service.StripeService;
 import com.yudi.backend.service.UserService;
 import com.yudi.enums.PlansEnum;
 import com.yudi.enums.RolesEnum;
@@ -30,10 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Yudi on 04/01/2018.
@@ -52,6 +50,9 @@ public class SignupController {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private StripeService stripeService;
 
     @RequestMapping(value = Constans.SignUp.SIGNUP_URL_MAPPING, method = RequestMethod.POST)
     public String signupPost(@RequestParam(name = "planId", required = true) int planId,
@@ -133,6 +134,28 @@ public class SignupController {
                 model.addAttribute(Constans.SignUp.ERROR_MESSAGE_KEY,"One or more credit card is null or empty");
                 return Constans.SignUp.SUBSCRIPTION_VIEW_NAME;
             }
+
+            //create stripe customer and subscription
+
+            Map<String, Object> tokenParams = new HashMap<>();
+            Map<String, Object> cardParams = new HashMap<>();
+            cardParams.put(Constans.StripeAttrToken.CC_NUMBER, payload.getCardNumber());
+            cardParams.put(Constans.StripeAttrToken.CC_MONTH, payload.getCardMonth());
+            cardParams.put(Constans.StripeAttrToken.CC_YEAR, payload.getCardYear());
+            cardParams.put(Constans.StripeAttrToken.CC_CVV, payload.getCardCode());
+
+            tokenParams.put(Constans.StripeAttrToken.CARD, cardParams);
+
+            Map<String, Object> customerParams = new HashMap<>();
+            customerParams.put(Constans.StripeAttrCustomer.DESCRIPTION, "Create customer pro");
+            customerParams.put(Constans.StripeAttrCustomer.EMAIL, payload.getEmail());
+
+            String planStripeId = stripeService.createStripePlan(selectedPlan.getId());
+            String custId = stripeService.createCustomer(tokenParams, customerParams);
+
+            stripeService.createSubscription(custId,planStripeId);
+
+            user.setStripeCustomerId(custId);
             registeredUser = userService.createUser(user, PlansEnum.PRO, roles);
             LOG.debug(payload.toString());
         }

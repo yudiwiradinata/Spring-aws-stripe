@@ -48,4 +48,22 @@ public class Constans {
         public static final String SIGNED_UP_MESSAGE_KEY = "signedUp";
         public static final String ERROR_MESSAGE_KEY = "message";
     }
+
+    public class StripeAttrToken{
+        public static final String CARD = "card";
+        public static final String CC_NUMBER = "number";
+        public static final String CC_MONTH = "exp_month";
+        public static final String CC_YEAR = "exp_year";
+        public static final String CC_CVV = "cvc";
+
+
+    }
+
+    public class StripeAttrCustomer{
+        public static final String SOURCE = "source";
+        public static final String DESCRIPTION = "description";
+        public static final String EMAIL = "email";
+
+    }
+
 }
