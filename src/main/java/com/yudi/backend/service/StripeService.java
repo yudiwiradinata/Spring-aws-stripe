@@ -42,19 +42,19 @@ public class StripeService {
             sub = Subscription.create(params);
         } catch (AuthenticationException e) {
             LOG.error("error AuthenticationException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (InvalidRequestException e) {
             LOG.error("error InvalidRequestException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (APIConnectionException e) {
             LOG.error("error APIConnectionException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (CardException e) {
             LOG.error("error CardException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (APIException e) {
             LOG.error("error APIException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         }
 
         return sub.getId();
@@ -88,19 +88,19 @@ public class StripeService {
             }
         } catch (AuthenticationException e) {
             LOG.error("error AuthenticationException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (InvalidRequestException e) {
             LOG.error("error InvalidRequestException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (APIConnectionException e) {
             LOG.error("error APIConnectionException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (CardException e) {
             LOG.error("error CardException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (APIException e) {
             LOG.error("error APIException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         }
         return plan.getId();
     }
@@ -115,19 +115,19 @@ public class StripeService {
             stripeCustId = customer.getId();
         } catch (APIConnectionException e) {
             LOG.error("error APIConnectionException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (InvalidRequestException e) {
             LOG.error("error InvalidRequestException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (AuthenticationException e) {
             LOG.error("error AuthenticationException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (APIException e) {
             LOG.error("error APIException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         } catch (CardException e) {
             LOG.error("error CardException", e);
-            throw new com.yudi.exceptions.StripeException();
+            throw new com.yudi.exceptions.StripeException(e);
         }
 
         return stripeCustId;

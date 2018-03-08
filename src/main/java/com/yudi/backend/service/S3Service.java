@@ -1,10 +1,12 @@
 package com.yudi.backend.service;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AccessControlList;
 import com.amazonaws.services.s3.model.GroupGrantee;
 import com.amazonaws.services.s3.model.Permission;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.yudi.exceptions.S3Exception;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,37 +48,41 @@ public class S3Service {
      * @return The URL of the uploaded image
      * @throws S3Exception If something goes wrong
      */
-    public String storeProfileName(MultipartFile uploadedFile, String username) throws IOException {
+    public String storeProfileName(MultipartFile uploadedFile, String username) {
 
         String profileImageUrl = null;
-        if (uploadedFile != null &&!uploadedFile.isEmpty()){
-            byte[] bytes = uploadedFile.getBytes();
+        try {
+            if (uploadedFile != null &&!uploadedFile.isEmpty()){
+                byte[] bytes = uploadedFile.getBytes();
 
-            //the root of our temporary assets. will create if doesn't exist
-            File tmpImageStoredFolder = new File(tempImageStore + File.separatorChar + username);
-            if(!tmpImageStoredFolder.exists()){
-                LOG.info("Creating temp folder");
-                tmpImageStoredFolder.mkdirs();
-            }
+                //the root of our temporary assets. will create if doesn't exist
+                File tmpImageStoredFolder = new File(tempImageStore + File.separatorChar + username);
+                if(!tmpImageStoredFolder.exists()){
+                    LOG.info("Creating temp folder");
+                    tmpImageStoredFolder.mkdirs();
+                }
 
-            File tmpProfileImgFile = new File(tmpImageStoredFolder.getAbsolutePath()
-                + File.separatorChar
-                + PROFILE_PICTURE_FILENAME
-                + "."
-                + FilenameUtils.getExtension(uploadedFile.getOriginalFilename())
-            );
+                File tmpProfileImgFile = new File(tmpImageStoredFolder.getAbsolutePath()
+                        + File.separatorChar
+                        + PROFILE_PICTURE_FILENAME
+                        + "."
+                        + FilenameUtils.getExtension(uploadedFile.getOriginalFilename())
+                );
 
-            LOG.info("Temporary file will be saved to {}",tmpProfileImgFile.getAbsolutePath());
+                LOG.info("Temporary file will be saved to {}",tmpProfileImgFile.getAbsolutePath());
 
-            try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(
+                try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(
                         new File(tmpProfileImgFile.getAbsolutePath())))){
-                bos.write(bytes);
+                    bos.write(bytes);
+                }
+
+                profileImageUrl = this.storeProfileNameToS3(tmpProfileImgFile, username);
+
+                tmpProfileImgFile.delete();
+
             }
-
-            profileImageUrl = this.storeProfileNameToS3(tmpProfileImgFile, username);
-
-            tmpProfileImgFile.delete();
-
+        }catch (IOException e){
+            throw new S3Exception(e);
         }
 
         return profileImageUrl;
@@ -87,6 +93,7 @@ public class S3Service {
      * url doesn't contain bucketname
      * @param bucketName
      * @return the root URL where bucket name is located
+     * @throws S3Exception If something goes wrong
      */
     private String ensureBucketExists(String bucketName){
         String bucketUrl = null;
@@ -97,8 +104,9 @@ public class S3Service {
                 LOG.info("Created bucket "+ bucketName);
             }
             bucketUrl =s3Client.getUrl(bucketName, null) + bucketName;
-        }catch (Exception e){
+        }catch (AmazonClientException e){
             LOG.error("Error {}",bucketName,e);
+            throw new S3Exception(e);
         }
         return bucketUrl;
     }
@@ -109,13 +117,13 @@ public class S3Service {
      * @param resource the file resource to upload S3
      * @param username
      * @return THE URL of the uploaded resource or null if a problem occured
-     * @throws IllegalArgumentException if the resource file does exist
+     * @throws S3Exception If something goes wrong
      */
     private String storeProfileNameToS3(File resource, String username){
         String resourceUrl = null;
         if(!resource.exists()){
             LOG.error("file doesn't exist {}", resource.getAbsolutePath());
-            throw  new IllegalArgumentException("The file "+resource.getAbsolutePath()+" doesn't exist");
+            throw  new S3Exception("The file "+resource.getAbsolutePath()+" doesn't exist");
         }
         String rootBucketUrl = this.ensureBucketExists(bucketName);
         if(null == rootBucketUrl){
@@ -128,8 +136,9 @@ public class S3Service {
             try{
                 s3Client.putObject(new PutObjectRequest(bucketName, key, resource).withAccessControlList(acl));
                 resourceUrl = s3Client.getUrl(bucketName, key).toString();
-            }catch (Exception e){
+            }catch (AmazonClientException e){
                 LOG.error("Error {}",bucketName,e);
+                throw new S3Exception(e);
             }
         }
 

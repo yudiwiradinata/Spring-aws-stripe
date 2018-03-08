@@ -10,6 +10,8 @@ import com.yudi.backend.service.StripeService;
 import com.yudi.backend.service.UserService;
 import com.yudi.enums.PlansEnum;
 import com.yudi.enums.RolesEnum;
+import com.yudi.exceptions.S3Exception;
+import com.yudi.exceptions.StripeException;
 import com.yudi.utils.Constans;
 import com.yudi.utils.UserUtils;
 import com.yudi.web.domain.frontend.BasicAccountPayload;
@@ -23,14 +25,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -191,5 +194,18 @@ public class SignupController {
         if(userService.findByEmail(payload.getEmail()) != null){
             model.addAttribute(Constans.SignUp.DUPLICATED_EMAIL_KEY,true);
         }
+    }
+
+    @ExceptionHandler({StripeException.class, S3Exception.class})
+    public ModelAndView signupException(HttpServletRequest request, Exception exception){
+        LOG.error("Request {} exception {}",request.getRequestURL(), exception);
+
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("exception", exception);
+        mv.addObject("url",request.getRequestURL());
+        mv.addObject("timestamp", LocalDate.now(Clock.systemUTC()));
+        mv.setViewName(Constans.GENERIC_ERROR_VIEW_NAME);
+
+        return mv;
     }
 }
